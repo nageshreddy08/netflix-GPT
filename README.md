@@ -1,8 +1,13 @@
 # NETFLIX GPT
 
 -Create React app
--Configgured tailwind CSS
+-Configured tailwind CSS
+-On successful Sign In, navigated to browse page
+--On successful Sign Up, navigated to browse page
 
+# Steps to deploy app
+-npm run build
+-firebase deploy
 
 
 # Features
