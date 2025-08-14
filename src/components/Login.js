@@ -4,6 +4,7 @@ import { checkValidData } from "../utils/validate";
 import {
   createUserWithEmailAndPassword,
   signInWithEmailAndPassword,
+  updateProfile,
 } from "firebase/auth";
 import { auth } from "../utils/firebase";
 import { useNavigate } from "react-router-dom";
@@ -21,16 +22,28 @@ const Login = () => {
   const handleButtonClick = () => {
     // console.log(email.current.value);
     // console.log(password.current.value);
-   // console.log(fullName.current.value);
-    const message = checkValidData(
-      email.current.value,
-      password.current.value,
-      fullName.current.value
-    );
+    // console.log(fullName.current.value);
+    //-->handling sign in logic here
+    if (isSignInForm) {
+      const message = checkValidData(
+        email.current.value,
+        password.current.value
+      );
+      setErrorMessage(message);
 
-    setErrorMessage(message);
+      if (message) return; //If there is any error message then simply return
+    } else {
+      //hanlding signup logic here
+      const message = checkValidData(
+        email.current.value,
+        password.current.value,
+        fullName.current.value
+      );
+      setErrorMessage(message);
 
-    if (message) return; //If there is any error message then simply return
+      if (message) return; 
+    }
+    
     //Sign In/ Sign Up logic
 
     if (!isSignInForm) {
@@ -41,10 +54,19 @@ const Login = () => {
         password.current.value
       )
         .then((userCredential) => {
+          
           // Signed up
           const user = userCredential.user;
           console.log(user);
-          navigate("/browse");
+          updateProfile(user,{
+            displayName:fullName.current.value,
+            photoURL:"https://cdn.pixabay.com/photo/2018/04/18/18/56/user-3331256_1280.png"})
+         
+         .then(()=>{
+          navigate("/browse")
+        }).catch((error)=>{
+          setErrorMessage(error.message);
+        })
         })
         .catch((error) => {
           //const errorCode = error.code;
@@ -71,7 +93,7 @@ const Login = () => {
           const errorMessage = error.message;
           setErrorMessage(errorMessage);
           console.log(errorMessage);
-          navigate("/browse");
+          //navigate("/browse");
         });
     }
   };

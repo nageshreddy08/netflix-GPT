@@ -22,16 +22,7 @@ const Body = () => {
   ]);
 
   //Handling user-on Auth change like signIn,signOut..
-  useEffect(() => {
-    onAuthStateChanged(auth, (user) => {
-      if (user) {
-        const { uid, email } = user;
-        dispatch(addUser({ uid: uid, email: email, displayName: email }));
-      } else {
-        dispatch(removeUser());
-      }
-    });
-  }, []);
+  
 
   return (
     <div>
